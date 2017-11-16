@@ -19,7 +19,7 @@ var uglify = require('gulp-uglify');
 // Configuration for Gulp
 var config = {
   js: {
-    src: './main.js',
+    src: './js/app.js',
     watch: './js/**/*',
     outputDir: './build/',
     outputFile: 'build.js',
@@ -50,7 +50,7 @@ function bundle(bundler) {
   bundler
     .bundle()
     .on('error', mapError) // Map error reporting
-    .pipe(source('main.js')) // Set source name
+    .pipe(source('app.js')) // Set source name
     .pipe(buffer()) // Convert to gulp pipeline
     .pipe(uglify()) // uglify file
     .pipe(rename(config.js.outputFile)) // Rename the output file
