@@ -16,9 +16,11 @@
     "babel-preset-stage-2": "^6.24.1",
     "babelify": "^8.0.0",
     "browserify": "^14.5.0",
+    "browserify-shim": "^3.8.14",
     "caching-coffeeify": "^0.5.1",
     "chalk": "^2.3.0",
     "coffeeify": "^3.0.1",
+    "google-maps": "^3.2.1",
     "gulp": "^3.9.1",
     "gulp-duration": "0.0.0",
     "gulp-livereload": "^3.8.1",
@@ -27,11 +29,37 @@
     "gulp-sourcemaps": "^2.6.1",
     "gulp-uglify": "^3.0.0",
     "gulp-util": "^3.0.8",
+    "knockout": "^3.4.2",
     "minifyify": "^7.3.5",
     "ramda": "^0.25.0",
+    "sidr": "^2.2.1",
     "utils-merge": "^1.0.1",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
-    "watchify": "^3.9.0"
+    "watchify": "^3.9.0",
+    "yelp-fusion": "^1.0.4"
+  },
+  "browserify": {
+    "transform": [
+      "browserify-shim"
+    ]
+  },
+  "browser": {
+    "jquery": "././node_modules/jquery/dist/jquery.js",
+    "jquery.sidr.min": "./js/libs/jquery.sidr.min.js",
+    "bootstrap.min": "./js/libs/bootstrap.min.js"
+  },
+  "browserify-shim": {
+    "jquery": "jQuery",
+    "jquery.sidr.min": {
+      "depends": [
+        "jquery:jQuery"
+      ]
+    },
+    "bootstrap.min": {
+      "depends": [
+        "jquery:jQuery"
+      ]
+    }
   }
 }

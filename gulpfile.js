@@ -52,7 +52,6 @@ function bundle(bundler) {
     .on('error', mapError) // Map error reporting
     .pipe(source('app.js')) // Set source name
     .pipe(buffer()) // Convert to gulp pipeline
-    .pipe(uglify()) // uglify file
     .pipe(rename(config.js.outputFile)) // Rename the output file
     .pipe(sourcemaps.init({loadMaps: true})) // Extract the inline sourcemaps
     .pipe(sourcemaps.write('./map')) // Set folder for sourcemaps to output to

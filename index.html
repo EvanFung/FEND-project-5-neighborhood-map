@@ -1,23 +1,57 @@
-<!-- index.html -->
-<!doctype html>
-<html>
-  <head>
-    <title>Getting Cozy with Browserify</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-    <style>
-      h1, p, div { text-align: center; }
-      html       { background: #fffffe; }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <h2>Welcome to the Client Side.</h2>
-      <div class="well">
-        <p>I see you've got some numbers. Why not let me see them?</p>
-        <div id="response">
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1">
+    <title>Neighbourhood Map</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <nav class="navbar navbar-fixed-top search-bar">
+        <h1 class="greet">Welcome to Neighbourhood Map</h1>
+        <input type="text" class="search-input" type="search" placeholder="Where do you want to go?">
+        <a href="#right-menu" id="right-menu" class="right-menu"><i class="fa fa-bars"></i></a>
+    </nav>
+    <div id="sidr-right">
+        <div class="sidebar">
+            <div class="filters">
+                <i class="fa fa-cutlery"></i>
+                <i class="fa fa-beer"></i>
+                <i class="fa fa-coffee"></i>
+                <i class="fa fa-book"></i>
+                <i class="fa fa-gamepad"></i>
+                <i class="fa fa-video-camera"></i>
+            </div>
+            <ul class="list">
+                <li class="item">
+                    <i data-bind="attr: { class: icon }" class="fa fa-beer"></i>
+                    <span class="category">Category</span>
+                    <h3>Name</h3>
+                    <p>Address</p>
+                    <p>Web</p>
+                </li>
+            </ul>
         </div>
-      </div>
+    </div>
+    <div id="map"></div>
+    <div class="">
+      
     </div>
     <script src="build/build.js"></script>
-  </body>
+    <script>
+    $(document).ready(function() {
+        $('#right-menu').sidr({
+            name: 'sidr-right',
+            side: 'right'
+        });
+    });
+    </script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDMqntnP2UTC93dLSnUB9BxWBRg9OZ7dCk&libraries=geometry,drawing,places&v=3&callback=initMap" onerror="googleError()">
+    </script>
+</body>
+
 </html>
