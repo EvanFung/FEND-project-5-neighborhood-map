@@ -5,52 +5,93 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1">
     <title>Neighbourhood Map</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/responsive.css" media="screen and (max-width:780px)">
 </head>
 
 <body>
-    <nav class="navbar navbar-fixed-top search-bar">
-        <h1 class="greet">Welcome to Neighbourhood Map</h1>
-        <input type="text" class="search-input" type="search" placeholder="Where do you want to go?">
-        <a href="#right-menu" id="right-menu" class="right-menu"><i class="fa fa-bars"></i></a>
-    </nav>
-    <div id="sidr-right">
-        <div class="sidebar">
-            <div class="filters">
-                <i class="fa fa-cutlery"></i>
-                <i class="fa fa-beer"></i>
-                <i class="fa fa-coffee"></i>
-                <i class="fa fa-book"></i>
-                <i class="fa fa-gamepad"></i>
-                <i class="fa fa-video-camera"></i>
+    <div class="container-fluid">
+        <header class="header-bar row flex-row align-items-center justify-content-start">
+            <h1 class="logo p-2">Hong Kong</h1>
+            <div class="header-search input-group">
+                <form class="input-text-group">
+                    <input type="text" id="location-input" placeholder="I want to go here..">
+                </form>
+                <button id="location-btn" class="btn">
+                    <i class="fa fa-search"></i>
+                </button>
             </div>
-            <ul class="list">
-                <li class="item">
-                    <i data-bind="attr: { class: icon }" class="fa fa-beer"></i>
-                    <span class="category">Category</span>
-                    <h3>Name</h3>
-                    <p>Address</p>
-                    <p>Web</p>
-                </li>
-            </ul>
+            <button id="filter-btn"><i class="fa fa-sliders"></i></button>
+        </header>
+        <div class="row flex-row">
+            <aside id="filters" class="filters">
+                <p class="filter-title">Sort By</p>
+                <div>
+                    <button id="ratingsBtn" class="filter-btn">Rating</button>
+                    <button class="filter-btn">Checkins</button>
+                    <!--                     <button class="filter-btn btn">Trail Length</button>
+ -->
+                </div>
+                <p class="filter-title">Filter by</p>
+                <div class="input-text-group">
+                    <input type="text" class="filter-input-text" placeholder="name">
+                    <span class="input-text-icon"><i class="fa fa-times"></i></span>
+                </div>
+            </aside>
+            <div class="spacer"></div>
+            <main class="results">
+                <article class="result d-flex">
+                    <img src="https://igx.4sqi.net/img/general/100x100/186753_bXWfu1hl2seDr5TizbL0X-3EuuNWkKLKoDnmJ_YgvwE.jpg" alt="" class="result-img">
+                    <div class="result-text-container">
+                        <h3 class="result-title">Lands End</h3>
+                        <h4 class="result-subtitle">El Camino Del Mar</h4>
+                        <h4 class="result-subtitle">San Francisco</h4>
+                        <div class="result-details d-flex align-items-center">
+                            <span class="result-icon">
+                                <i class="fa fa-star"></i>
+                                17,113 checkins 
+                            </span>
+                            <h5></h5>
+                            <span class="result-icon">
+                                <i class="fa fa-blind"></i>
+                            </span>
+                            <h5>6.2miles round trip</h5>
+                        </div>
+                    </div>
+                    <div class="rating">9.9</div>
+                </article>
+                <article class="result d-flex">
+                    <img src="https://igx.4sqi.net/img/general/100x100/186753_bXWfu1hl2seDr5TizbL0X-3EuuNWkKLKoDnmJ_YgvwE.jpg" alt="" class="result-img">
+                    <div class="result-text-container">
+                        <h3 class="result-title">Lands End</h3>
+                        <h4 class="result-subtitle">El Camino Del Mar</h4>
+                        <h4 class="result-subtitle">San Francisco</h4>
+                        <div class="result-details d-flex align-items-center">
+                            <span class="result-icon">
+                                <i class="fa fa-star"></i>
+                                17,113 checkins 
+                            </span>
+                            <h5></h5>
+                            <span class="result-icon">
+                                <i class="fa fa-blind"></i>
+                            </span>
+                            <h5>6.2miles round trip</h5>
+                        </div>
+                    </div>
+                    <div class="rating">9.9</div>
+                </article>
+            </main>
+            <div class="map-container">
+                <div id="map"></div>
+            </div>
         </div>
     </div>
-    <div id="map"></div>
-    <div class="">
-      
-    </div>
     <script src="build/build.js"></script>
-    <script>
-    $(document).ready(function() {
-        $('#right-menu').sidr({
-            name: 'sidr-right',
-            side: 'right'
-        });
-    });
-    </script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDMqntnP2UTC93dLSnUB9BxWBRg9OZ7dCk&libraries=geometry,drawing,places&v=3&callback=initMap" onerror="googleError()">
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDMqntnP2UTC93dLSnUB9BxWBRg9OZ7dCk&libraries=geometry,drawing,places&v=3&callback=initMap" ">
     </script>
 </body>
 
