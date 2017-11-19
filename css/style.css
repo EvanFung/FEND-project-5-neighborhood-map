@@ -251,4 +251,11 @@ button:focus {
    position: relative;
    z-index: 1;
 }
+.right-menu {
+    display: none;
+}
+.right-menu .fa {
+    font-size: 24px;
+    color: #333;
+}
 

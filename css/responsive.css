@@ -24,9 +24,8 @@
         border: none;
         display: block;
         position: absolute;
-        padding-bottom: 5px;
-        right: 25px;
-        font-size: 1.3em;
+        right: 45px;
+        font-size: 1.4em;
         color: #fff;
         background-color: none;
     }
@@ -69,5 +68,10 @@
     	position: fixed;
     	width: 100%;
     	z-index: 1;
+    }
+    .right-menu {
+        display: block;
+        position: absolute;
+        right: 15px;
     }
 }
