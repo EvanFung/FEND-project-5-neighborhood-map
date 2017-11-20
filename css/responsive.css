@@ -16,6 +16,7 @@
         width: 70vw;
         min-width: 70vw;
         height: 35px;
+        margin-left: 20px;
     }
     .header-search button {
         display: none;
@@ -24,8 +25,8 @@
         border: none;
         display: block;
         position: absolute;
-        right: 45px;
-        font-size: 1.4em;
+        right: 20px;
+        font-size: 24px;
         color: #fff;
         background-color: none;
     }
@@ -34,7 +35,9 @@
         height: auto;
         margin-top: 0;
         overflow: auto;
-		position: static;
+		/*position: static;*/
+        position: relative;
+
     }
     .result-title {
         font-size: 1.3em;
@@ -70,8 +73,8 @@
     	z-index: 1;
     }
     .right-menu {
-        display: block;
+        display: none;
         position: absolute;
-        right: 15px;
+        left:10px;
     }
 }
