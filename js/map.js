@@ -135,7 +135,7 @@ function populateInfoWindow(marker, infoWindow) {
         </div>
     </div>
 </div>
-<div class="result-link"><a target="_blank" href="https://foursquare.com/v/${marker.url}">See on Foursquare</a></div>
+<div class="result-link"><a target="_blank" href="https://foursquare.com/v/${marker.url}">See more on Foursquare</a></div>
     `);
     //Display the infowindow 
     infoWindow.open(map, marker);

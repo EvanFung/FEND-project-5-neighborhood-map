@@ -32,6 +32,7 @@ textarea:focus,
 button:focus {
     outline: none;
 }
+
 .logo {
     color: #fff;
     font: bolder 1.2em 'Lato', 'Helvetica Neue';
@@ -44,13 +45,23 @@ button:focus {
     height: 80px;
     padding: 0 30px;
     box-shadow: 0 0px 20px #a8bad1;
-    background-color: #3ca25b;
+    background-color: #2d5be3;
     z-index: 20;
 }
+
+.header-bar a {
+    color: #fff;
+    font: bolder 1.2em 'Lato', 'Helvetica Neue';
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    text-decoration: none;
+}
+
 .header-search {
     margin-left: 30px;
     max-width: 30vw;
 }
+
 .header-search input {
     border: none;
     border-radius: 5px 0 0 5px;
@@ -64,10 +75,11 @@ button:focus {
     height: 40px;
     transition: width 0.25s ease, background-color 0.45s ease;
 }
+
 .header-search button {
     border: none;
     border-radius: 0 5px 5px 0;
-    background-color: #157540;
+    background-color: rgba(255, 255, 255, .15);
     cursor: pointer;
     color: #fff;
     width: 45px;
@@ -75,9 +87,11 @@ button:focus {
     position: relative;
     z-index: 2;
 }
+
 .header-search button:hover {
     box-shadow: 0 0 15px #167c43;
 }
+
 .input-text-group {
     position: relative;
 }
@@ -100,6 +114,7 @@ button:focus {
     border: none;
     background: none;
 }
+
 .filters {
     width: 30vw;
     min-width: 300px;
@@ -116,8 +131,9 @@ button:focus {
     color: #8d8d8d;
     font: 500 0.8em 'Helvetica Neue', sans-serif;
     text-transform: uppercase;
-    padding-top: 20px;    
+    padding-top: 20px;
 }
+
 .filter-btn {
     border: none;
     border-radius: 3px;
@@ -125,18 +141,20 @@ button:focus {
     cursor: pointer;
     font: 500 0.9em 'Helvetica Neue', sans-serif;
     padding: 8px 15px;
-    margin-right: 5px;   
+    margin-right: 5px;
 }
 
 .filter-btn:hover {
-    color:black;
+    color: black;
     background-color: #5cb85c;
 }
-.filter-btn:active {
-    background-color: #5cb85c;
+
+.filter-btn-selected {
+    background-color: #4bc470;
     box-shadow: 0 0 15px rgba(75, 196, 112, 0.6);
-    color: #fff;    
+    color: #fff;
 }
+
 .filter-input-text {
     border: none;
     box-shadow: 0 2px 7px rgba(168, 186, 209, 0.6);
@@ -157,22 +175,21 @@ button:focus {
     width: 30vw;
     height: calc(100vh - 80px - 200px);
     position: absolute;
-    top:0;
-    left:0;
+    top: 0;
+    left: 0;
     /*.filters box and navbar's height are 200px and navbar 80px */
-    margin-top:calc(200px + 80px);
+    margin-top: calc(200px + 80px);
     z-index: 3;
     border-top: 1px solid #fff;
     box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.15), 2px 0 20px #a8bad1;
     overflow: scroll;
-
 }
 
 .result {
     position: relative;
     background-color: #fff;
     border-radius: 6px;
-    margin:15px; 
+    margin: 15px;
     padding: 15px 10px;
     width: calc(100% - 30px);
 }
@@ -194,7 +211,10 @@ button:focus {
     font: 500 1.05em 'Helvetica Neue', sans-serif;
     margin-bottom: 3px;
     margin-right: 50px;
+    color: #2d5be3;
+    font-weight: bold;
 }
+
 .result-subtitle {
     color: #8d8d8d;
     font: 400 0.8em 'Helvetica Neue', sans-serif;
@@ -205,8 +225,7 @@ button:focus {
 }
 
 .result-details h5 {
-    color: #4bc470;
-    font: 400 0.8em 'Helvetica Neue', sans-serif;
+    font: 500 0.8em 'Helvetica Neue', sans-serif;
     padding-right: 20px;
 }
 
@@ -240,22 +259,25 @@ button:focus {
     width: 32px;
     height: 32px;
 }
+
 #map {
     height: 100%;
     width: 100%;
 }
+
 .map-container {
-   width: calc(100% - 30vw); 
-   height: calc(100vh - 80px);
-   flex: 2;
-   position: relative;
-   z-index: 1;
+    width: calc(100% - 30vw);
+    height: calc(100vh - 80px);
+    flex: 2;
+    position: relative;
+    z-index: 1;
 }
+
 .right-menu {
     display: none;
 }
+
 .right-menu .fa {
     font-size: 24px;
     color: #333;
 }
-

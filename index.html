@@ -3,9 +3,8 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1">
-    <title>Neighbourhood Map</title>
-    <link rel="stylesheet" href="css/normalize.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, initial-scale=1, maximum-scale=1, user-scalable=0, shrink-to-fit=no">
+    <title>Hong Kong Map</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
     <link rel="stylesheet" href="css/style.css">
@@ -17,12 +16,12 @@
     <div class="container-fluid">
         <header class="header-bar row flex-row align-items-center">
             <a class="right-menu" id="right-menu" href="#right-menu"><i class="fa fa-bars"></i></a>
-            <h1 class="logo p-2">Hong Kong</h1>
+            <h1 class="logo p-2"><a href="index.html">Hong Kong</a></h1>
             <div class="header-search input-group">
                 <form class="input-text-group" data-bind="submit: searchLocation">
                     <input type="text" id="location-input" placeholder="I want to go here.." data-bind="textInput : locationInput">
                 </form>
-                <button id="location-btn" class="btn">
+                <button id="location-btn" class="btn" data-bind="click: searchLocation">
                     <i class="fa fa-search"></i>
                 </button>
             </div>
@@ -33,7 +32,7 @@
                 <p class="filter-title">Sort By</p>
                 <div>
                     <button id="ratingsBtn" class="filter-btn" data-bind="click: sortByRating">Rating</button>
-                    <button class="filter-btn" data-bind="click: sortByCheckins">Checkins</button>
+                    <button id="checkinsBtn" class="filter-btn" data-bind="click: sortByCheckins">Checkins</button>
                 </div>
                 <p class="filter-title">Filter by</p>
                 <div class="input-text-group">

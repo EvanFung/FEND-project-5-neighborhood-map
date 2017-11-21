@@ -18,7 +18,7 @@ var Attraction = function(data) {
         this.imgSrc = data.venue.featuredPhotos.items[0].prefix + '100x100' +
             data.venue.featuredPhotos.items[0].suffix;
     } else {
-        this.imgSrc = 'https://ss3.4sqi.net/img/categories_v2/parks_outdoors/hikingtrail_512.png';
+        this.imgSrc = 'https://igx.4sqi.net/img/general/100x100/11932034_wMs88Hpv1wzeN7TAVZ6QsfDIbJwXJVvELefxM4i3mLE.jpg';
     }
     this.location = {
         lat: data.venue.location.lat,
@@ -62,6 +62,7 @@ var App = function() {
                 viewModel.parseResults(results);
                 //from map.js function
                 setMarkers(viewModel.resultList());
+                console.log(results);
                 return true;
             })
             .fail(function() {
@@ -133,6 +134,7 @@ var ViewModel = function() {
     }
 
     self.sortByRating = function() {
+        toggleButton('#ratingsBtn');
         self.resultList.sort(function(a, b) {
             return (a.rating === b.rating) ? 0 : (a.rating > b.rating ? -1 : 1);
         });
@@ -141,6 +143,7 @@ var ViewModel = function() {
     }
 
     self.sortByCheckins = function() {
+        toggleButton('#checkinsBtn');
         self.resultList.sort(function(a, b) {
             return (a.checkins === b.checkins) ? 0 : (a.checkins > b.checkins ? -1 : 1);
         });
@@ -153,6 +156,12 @@ var ViewModel = function() {
             self.resultList()[i].id(i + 1);
         }
     };
+
+    var toggleButton = function(btnId) {
+        $('#ratingsBtn').removeClass('filter-btn-selected');
+        $('#checkinsBtn').removeClass('filter-btn-selected');
+        $(btnId).addClass('filter-btn-selected');
+    }
 };
 
 var viewModel = new ViewModel();

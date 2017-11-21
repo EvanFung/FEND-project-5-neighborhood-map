@@ -31,7 +31,7 @@ var Attraction = function Attraction(data) {
     if (data.venue.featuredPhotos) {
         this.imgSrc = data.venue.featuredPhotos.items[0].prefix + '100x100' + data.venue.featuredPhotos.items[0].suffix;
     } else {
-        this.imgSrc = 'https://ss3.4sqi.net/img/categories_v2/parks_outdoors/hikingtrail_512.png';
+        this.imgSrc = 'https://igx.4sqi.net/img/general/100x100/11932034_wMs88Hpv1wzeN7TAVZ6QsfDIbJwXJVvELefxM4i3mLE.jpg';
     }
     this.location = {
         lat: data.venue.location.lat,
@@ -74,6 +74,7 @@ var App = function App() {
             viewModel.parseResults(results);
             //from map.js function
             setMarkers(viewModel.resultList());
+            console.log(results);
             return true;
         }).fail(function () {
             alert('cannot get data from foursquare');
@@ -144,6 +145,7 @@ var ViewModel = function ViewModel() {
     };
 
     self.sortByRating = function () {
+        toggleButton('#ratingsBtn');
         self.resultList.sort(function (a, b) {
             return a.rating === b.rating ? 0 : a.rating > b.rating ? -1 : 1;
         });
@@ -152,6 +154,7 @@ var ViewModel = function ViewModel() {
     };
 
     self.sortByCheckins = function () {
+        toggleButton('#checkinsBtn');
         self.resultList.sort(function (a, b) {
             return a.checkins === b.checkins ? 0 : a.checkins > b.checkins ? -1 : 1;
         });
@@ -163,6 +166,12 @@ var ViewModel = function ViewModel() {
         for (var i = 0; i < self.resultList().length; i++) {
             self.resultList()[i].id(i + 1);
         }
+    };
+
+    var toggleButton = function toggleButton(btnId) {
+        $('#ratingsBtn').removeClass('filter-btn-selected');
+        $('#checkinsBtn').removeClass('filter-btn-selected');
+        $(btnId).addClass('filter-btn-selected');
     };
 };
 
@@ -633,7 +642,7 @@ function populateInfoWindow(marker, infoWindow) {
     largeInfowindow.close();
     // Set the infoWindow on the marker
     infoWindow.marker = marker;
-    infoWindow.setContent('\n<div class=" d-flex">\n\t<img class="result-img" src="' + marker.imgSrc + '">\n    <div class="result-text-container">\n        <h3 class="result-title">' + marker.label.text + ' . ' + marker.name + '</h3>\n        <h4 class="result-subtitle">' + marker.address + '</h4>\n        <h4 class="result-subtitle">' + marker.city + '</h4>\n        <div class="result-details d-flex align-items-center"><span class="result-icon"><i class="fa fa-star" aria-hidden="true"></i></span>\n            <h5>' + marker.checkins + '</h5><span class="result-icon"><i class="fa fa-phone" aria-hidden="true"></i></span>\n            <h5>' + marker.phone + '</h5></div>\n        <div>\n            <div class="rating">' + marker.rating + '</div>\n        </div>\n    </div>\n</div>\n<div class="result-link"><a target="_blank" href="https://foursquare.com/v/' + marker.url + '">See on Foursquare</a></div>\n    ');
+    infoWindow.setContent('\n<div class=" d-flex">\n\t<img class="result-img" src="' + marker.imgSrc + '">\n    <div class="result-text-container">\n        <h3 class="result-title">' + marker.label.text + ' . ' + marker.name + '</h3>\n        <h4 class="result-subtitle">' + marker.address + '</h4>\n        <h4 class="result-subtitle">' + marker.city + '</h4>\n        <div class="result-details d-flex align-items-center"><span class="result-icon"><i class="fa fa-star" aria-hidden="true"></i></span>\n            <h5>' + marker.checkins + '</h5><span class="result-icon"><i class="fa fa-phone" aria-hidden="true"></i></span>\n            <h5>' + marker.phone + '</h5></div>\n        <div>\n            <div class="rating">' + marker.rating + '</div>\n        </div>\n    </div>\n</div>\n<div class="result-link"><a target="_blank" href="https://foursquare.com/v/' + marker.url + '">See more on Foursquare</a></div>\n    ');
     //Display the infowindow 
     infoWindow.open(map, marker);
 
