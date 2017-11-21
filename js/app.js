@@ -58,7 +58,6 @@ var App = function() {
 
         $.ajax(settings)
             .done(function(results) {
-                // console.log(results);
                 viewModel.parseResults(results);
                 //from map.js function
                 setMarkers(viewModel.resultList());
@@ -163,6 +162,12 @@ var ViewModel = function() {
         $(btnId).addClass('filter-btn-selected');
     }
 };
+
+// Create an alert if Google Maps doesn't respond
+function googleError() {
+    'use strict';
+    alert("Google is not responding. Check your connection or come back later.");
+}
 
 var viewModel = new ViewModel();
 var app = new App();

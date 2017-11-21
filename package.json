@@ -46,17 +46,11 @@
   },
   "browser": {
     "jquery": "././node_modules/jquery/dist/jquery.js",
-    "jquery.sidr.min": "./js/libs/jquery.sidr.min.js",
     "bootstrap.min": "./js/libs/bootstrap.min.js",
     "wNumb": "./js/libs/wNumb.js"
   },
   "browserify-shim": {
     "jquery": "jQuery",
-    "jquery.sidr.min": {
-      "depends": [
-        "jquery:jQuery"
-      ]
-    },
     "bootstrap.min": {
       "depends": [
         "jquery:jQuery"
