@@ -8,10 +8,17 @@ var wNumb = require('wNumb');
 
 var _require = require('./map'),
     initMap = _require.initMap,
-    initSearch = _require.initSearch;
+    initSearch = _require.initSearch,
+    setMarkers = _require.setMarkers,
+    populateInfoWindow = _require.populateInfoWindow,
+    searchPlace = _require.searchPlace,
+    geocoder = _require.geocoder,
+    hideMarkers = _require.hideMarkers,
+    animateMarker = _require.animateMarker,
+    showSpecifiedMarker = _require.showSpecifiedMarker;
 
 window.initMap = initMap;
-
+// console.log(hideMarkers);
 var Attraction = function Attraction(data) {
     this.id = ko.observable(0);
     this.title = data.venue.name;
@@ -30,29 +37,31 @@ var Attraction = function Attraction(data) {
         lat: data.venue.location.lat,
         lng: data.venue.location.lng
     };
+    this.phone = data.venue.contact.formattedPhone || 'No contact info available';
 };
 
 var checkinFormat = wNumb({
     thousand: ','
 });
 
-var app = function () {
+var App = function App() {
     var self = this;
     var CLIENT_ID = '1O5OM0UH1XQFPBXM000UK2B5YZM1KCQ0NWZCOBLBWNPASWGP';
     var CLIENT_SECRET = 'SNAJMK1AGOCQAOHDFQBUVP5BT25FDHYK00FLEYBIYRRCNUBL';
 
-    var location = 'Hong Kong, HK';
-    var query = 'fun';
-    var baseUrl = 'https://api.foursquare.com/v2/venues/explore';
+    self.location = 'Hong Kong, HK';
+    self.query = 'fun';
+    self.baseUrl = 'https://api.foursquare.com/v2/venues/explore';
 
-    var requestFourSquare = function requestFourSquare() {
+    this.requestFourSquare = function () {
+        var requestFlag;
         var settings = {
-            url: baseUrl,
+            url: self.baseUrl,
             data: {
                 client_id: CLIENT_ID,
                 client_secret: CLIENT_SECRET,
-                near: location,
-                query: query,
+                near: self.location,
+                query: self.query,
                 venuePhotos: '1',
                 v: '20170801'
             },
@@ -61,33 +70,106 @@ var app = function () {
         };
 
         $.ajax(settings).done(function (results) {
-            console.log(results);
+            // console.log(results);
+            viewModel.parseResults(results);
+            //from map.js function
+            setMarkers(viewModel.resultList());
+            return true;
         }).fail(function () {
             alert('cannot get data from foursquare');
+            return false;
         });
     };
-    requestFourSquare();
-}();
+
+    this.init = function () {
+        this.requestFourSquare();
+    };
+};
 
 var ViewModel = function ViewModel() {
     var self = this;
     this.resultList = ko.observableArray([]);
-    this.userLocation = ko.observable();
-    this.filter = ko.observable();
+    this.locationInput = ko.observable('');
+    this.filter = ko.observable('');
 
-    this.parseResults = function (data) {
+    self.parseResults = function (data) {
         //Set the results to the data we received in json form
-        var results = data.respnse.groups[0].items;
+        var results = data.response.groups[0].items;
 
         self.resultList.removeAll();
 
         results.forEach(function (resultData) {
             self.resultList.push(new Attraction(resultData));
         });
+        //update id 
+        updateResultId();
+        //debug
+        // console.log(self.resultList());
+    };
 
-        console.log(self.resultList());
+    ko.extenders.notifyMarkers = function (target) {
+        target.subscribe(function (array) {
+            hideMarkers(array);
+        });
+        return target;
+    };
+
+    self.filteredItems = ko.computed(function () {
+        var filter = self.filter().toLowerCase();
+
+        if (!filter) {
+            return self.resultList();
+        } else {
+            return ko.utils.arrayFilter(self.resultList(), function (result) {
+                return result.title.toLowerCase().includes(filter);
+            });
+        }
+    }).extend({ notifyMarkers: '', rateLimit: 50 });
+
+    self.toggleFilters = function () {
+        document.getElementById('filters').classList.toggle('slide-in');
+    };
+
+    self.searchLocation = function () {
+        searchPlace(self.locationInput(), app);
+    };
+
+    self.emptyFilter = function () {
+        self.filter('');
+    };
+
+    self.showMarker = function (item) {
+        var index = item.id() - 1;
+        showSpecifiedMarker(index);
+    };
+
+    self.sortByRating = function () {
+        self.resultList.sort(function (a, b) {
+            return a.rating === b.rating ? 0 : a.rating > b.rating ? -1 : 1;
+        });
+        updateResultId();
+        setMarkers(self.resultList());
+    };
+
+    self.sortByCheckins = function () {
+        self.resultList.sort(function (a, b) {
+            return a.checkins === b.checkins ? 0 : a.checkins > b.checkins ? -1 : 1;
+        });
+        updateResultId();
+        setMarkers(self.resultList());
+    };
+
+    var updateResultId = function updateResultId() {
+        for (var i = 0; i < self.resultList().length; i++) {
+            self.resultList()[i].id(i + 1);
+        }
     };
 };
+
+var viewModel = new ViewModel();
+var app = new App();
+app.init();
+ko.applyBindings(viewModel);
 
 },{"./map":3,"jQuery":5,"knockout":6,"wNumb":2}],2:[function(require,module,exports){
 (function (global){
@@ -441,15 +523,27 @@ var map;
 var markers = [];
 var largeInfowindow, autocomplete, geocoder, bounds;
 initMap = function initMap() {
+    //locate center of the map in Hong Kong
     var latlng = new google.maps.LatLng(22.3964, 114.1095);
     // Constructor creates a new map - only center and zoom are required.
     map = new google.maps.Map(document.getElementById('map'), {
         center: latlng,
-        zoom: 12,
-        styles: styles,
-        mapControlType: false
+        zoom: 10,
+        zoomControl: true,
+        zoomControlOptions: {
+            position: google.maps.ControlPosition.TOP_LEFT
+        },
+        mapTypeControlOptions: {
+            position: google.maps.ControlPosition.TOP_RIGHT
+        },
+        styles: styles
     });
-
+    bounds = new google.maps.LatLngBounds();
+    google.maps.event.addDomListener(window, 'resize', function () {
+        if (bounds) {
+            map.fitBounds(bounds);
+        };
+    });
     largeInfowindow = new google.maps.InfoWindow();
     initSearch();
 };
@@ -461,9 +555,151 @@ function initSearch() {
     geocoder = new google.maps.Geocoder();
 }
 
+function searchPlace(address, app) {
+    // Close the any infowindos that are open
+    largeInfowindow.close();
+    // Lookup address and get lat lng
+    zoomToArea(address, geocoder, app);
+}
+
+function zoomToArea(address, geocoder, app) {
+    geocoder.geocode({ 'address': address }, function (results, status) {
+        if (status === google.maps.GeocoderStatus.OK) {
+            app.location = results[0].formatted_address;
+            app.query = 'fun';
+            app.baseUrl = 'https://api.foursquare.com/v2/venues/explore';
+            app.requestFourSquare();
+        } else {
+            window.alert('We could not find that location - try entering a more' + ' specific place.');
+        }
+    });
+}
+
+function setMarkers(list) {
+    // Style the markers a bit. This will be our listing marker icon.
+    var defaultIcon = makeMarkerIcon();
+    // Reset bounds variable
+    bounds = new google.maps.LatLngBounds();
+    deleteMarkers();
+    var item;
+    for (var i = 0; i < list.length; i++) {
+        item = list[i];
+        //create a new marker for each item
+        var marker = new google.maps.Marker({
+            map: map,
+            position: item.location,
+            label: {
+                text: item.id() + ' ',
+                color: 'white',
+                fontSize: '12px',
+                fontWeight: '600'
+            },
+            animation: google.maps.Animation.DROP,
+            name: item.title,
+            imgSrc: item.imgSrc,
+            address: item.address,
+            city: item.city,
+            checkins: item.checkinsFormat,
+            rating: item.rating,
+            url: item.url,
+            phone: item.phone,
+            icon: defaultIcon
+        });
+
+        markers.push(marker);
+
+        //create an onclik event to open an infowindow at each marker
+        marker.addListener('click', function () {
+            animateMarker(-1, this);
+            populateInfoWindow(this, largeInfowindow);
+        });
+
+        bounds.extend(markers[i].position);
+    }
+    // Extend the boundaries of the map for each marker if zoom option is set
+    map.fitBounds(bounds);
+}
+
+// This function takes in a COLOR, and then creates a new marker
+// icon of that color. The icon will be 21 px wide by 34 high, have an origin
+// of 0, 0 and be anchored at 10, 34).
+function makeMarkerIcon() {
+    var markerImage = new google.maps.MarkerImage('http://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|' + '0091ff' + '|40|_|%E2%80%A2', new google.maps.Size(21, 34), new google.maps.Point(0, 0), new google.maps.Point(10, 34), new google.maps.Size(21, 34));
+    return markerImage;
+}
+
+function populateInfoWindow(marker, infoWindow) {
+    //Always close the exsiting infowindow first
+    largeInfowindow.close();
+    // Set the infoWindow on the marker
+    infoWindow.marker = marker;
+    infoWindow.setContent('\n<div class=" d-flex">\n\t<img class="result-img" src="' + marker.imgSrc + '">\n    <div class="result-text-container">\n        <h3 class="result-title">' + marker.label.text + ' . ' + marker.name + '</h3>\n        <h4 class="result-subtitle">' + marker.address + '</h4>\n        <h4 class="result-subtitle">' + marker.city + '</h4>\n        <div class="result-details d-flex align-items-center"><span class="result-icon"><i class="fa fa-star" aria-hidden="true"></i></span>\n            <h5>' + marker.checkins + '</h5><span class="result-icon"><i class="fa fa-phone" aria-hidden="true"></i></span>\n            <h5>' + marker.phone + '</h5></div>\n        <div>\n            <div class="rating">' + marker.rating + '</div>\n        </div>\n    </div>\n</div>\n<div class="result-link"><a target="_blank" href="https://foursquare.com/v/' + marker.url + '">See on Foursquare</a></div>\n    ');
+    //Display the infowindow 
+    infoWindow.open(map, marker);
+
+    marker.addListener('closeclick', function () {
+        infoWindow.marker = null;
+    });
+
+    marker.addListener('closeclick', function () {
+        infoWindow.marker = null;
+    });
+}
+
+// This function will loop through the listings and hide them all.
+function clearMarkers() {
+    for (var i = 0; i < markers.length; i++) {
+        markers[i].setMap(null);
+    }
+}
+//deletes all markers in the array by removing references ot them.
+function deleteMarkers() {
+    clearMarkers();
+    markers = [];
+}
+
+function hideMarkers(array) {
+    var validMarker = false;
+    for (var i = 0; i < markers.length; i++) {
+        for (var j = 0; j < array.length; j++) {
+            if (markers[i].name === array[j].title) {
+                validMarker = true;
+                break;
+            }
+        }
+        validMarker ? markers[i].setVisible(true) : markers[i].setVisible(false);
+        validMarker = false;
+    }
+}
+
+function animateMarker(index, marker) {
+    var marker = markers[index] || marker;
+    if (marker) {
+        marker.setAnimation(google.maps.Animation.BOUNCE);
+        window.setTimeout(function () {
+            marker.setAnimation(null);
+        }, 500);
+    }
+}
+
+function showSpecifiedMarker(index) {
+    animateMarker(index);
+    populateInfoWindow(markers[index], largeInfowindow);
+}
+
 module.exports = {
+    markers: markers,
+    largeInfowindow: largeInfowindow,
+    bounds: bounds,
     initMap: initMap,
-    initSearch: initSearch
+    initSearch: initSearch,
+    setMarkers: setMarkers,
+    populateInfoWindow: populateInfoWindow,
+    searchPlace: searchPlace,
+    geocoder: geocoder,
+    hideMarkers: hideMarkers,
+    animateMarker: animateMarker,
+    showSpecifiedMarker: showSpecifiedMarker
 };
 
 },{"./mapstyle":4}],4:[function(require,module,exports){

@@ -65,6 +65,19 @@ var places = {
     }
 }
 
-var venues = [
-	
-]
+    <div class="d-flex">
+        <img class="result-img" src="${marker.imgSrc}">
+        <div class="result-text-container">
+            <h3 class="result-title">${marker.label.text} . ${marker.name}</h3>
+            <h4 class="result-subtitle">${marker.address}</h4>
+            <h4 class="result-subtitle">${marker.city}</h4>
+            <div class="result-details d-flex align-items-center">
+                <span class="result-icon"><i class="fa fa-star" aria-hidden="true"></i></span>
+                <h5>${marker.checkins}</h5>
+                <span class="result-icon"><i class="fa fa-phone" aria-hidden="true"></i></span>
+                <h5></h5>
+            </div>
+        </div>
+        <div class="rating">${marker.rating}</div>
+        <div class="result-link"><a target="_blank" href="https://foursquare.com/v/${marker.url}">See more on Foursquare</a></div>
+    </div>
