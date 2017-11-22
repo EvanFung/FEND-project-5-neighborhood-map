@@ -45,12 +45,8 @@ Some useful tips to help you get started:
   $> cd /path/to/your-project-folder
   $> ./ngrok http 8000
   ```
-
-<<<<<<< HEAD
 11. Copy the public URL ngrok gives you and try running it through PageSpeed Insights! Optional: [More on integrating ngrok, Grunt and PageSpeed.](http://www.jamescryer.com/2014/06/12/grunt-pagespeed-and-ngrok-locally-testing/)
-
-=======
->>>>>>> ff961f1822cdc83e022d22f4cae9c1d01adbc17c
+=
 ### APIs used
 
 - Google Maps Javascript API (https://developers.google.com/maps/documentation/javascript/)
